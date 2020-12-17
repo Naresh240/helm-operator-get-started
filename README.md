@@ -41,7 +41,7 @@
 
   Wait for Flux to start:
     
-    kubectl -n flux rollout status deployment/flux
+    kubectl -n fluxcd rollout status deployment/flux
   
   Check if Flux deployment is successful or not:
   
