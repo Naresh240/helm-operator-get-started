@@ -8,6 +8,11 @@
     chmod +x fluxctl
     mv fluxctl /usr/bin/
     fluxctl version
+# Install Helm3:
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    export PATH=$PATH:/usr/local/bin
+    ./get_helm.sh
 # Install FluxCD or Flux Operator:
   Create the flux namespace:
     
