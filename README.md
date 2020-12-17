@@ -67,10 +67,13 @@
     
     git clone https://github.com/Naresh240/helm-operator-get-started.git
     cd helm-operator-get-started
-  2. Install the HelmRelease Kubernetes custom resource definition:
+  2. "fluxcd" to be add to our repositories
+    
+    helm repo add fluxcd https://charts.fluxcd.io
+  3. Install the HelmRelease Kubernetes custom resource definition:
     
     kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/master/deploy/crds.yaml
-  3. Install Flux Helm Operator with Helm v3 support:
+  4. Install Flux Helm Operator with Helm v3 support:
   
     helm upgrade -i helm-operator fluxcd/helm-operator --wait --namespace fluxcd --set git.ssh.secretName=flux-git-deploy --set helm.versions=v3
-  4. Keep Helm Release file inside our GitOps Repo and check whether deployment done or not
+  5. Keep Helm Release file inside our GitOps Repo and check whether deployment done or not
