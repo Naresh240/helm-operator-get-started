@@ -11,7 +11,7 @@
 # Install FluxCD or Flux Operator:
   Create the flux namespace:
     
-    kubectl create ns nodejsdeploy
+    kubectl create ns fluxcd
   
   Then, install Flux in your cluster (replace YOURUSER with your GitHub username):
   Syntax:    
@@ -30,9 +30,9 @@
     fluxctl install \
     --git-user=${GHUSER} \
     --git-email=${GHUSER}@users.noreply.github.com \
-    --git-url=git@github.com:${GHUSER}/GitOps-NodeJs-CD \
-    --git-path=deploy \
-    --namespace=nodejsdeploy | kubectl apply -f -
+    --git-url=git@github.com:${GHUSER}/helm-chart-nginx \
+    --git-path=./ \
+    --namespace=fluxcd | kubectl apply -f -
 
   Wait for Flux to start:
     
@@ -40,9 +40,7 @@
   
   Check if Flux deployment is successful or not:
   
-    kubectl get deploy -n nodejsdeploy
-  
-  ![image](https://user-images.githubusercontent.com/58024415/101141082-cb7dff00-3639-11eb-9d15-f6a1ea351391.png)
+    kubectl get deploy -n fluxcd
     
   Authorise Flux CD to Connect to Your Git Repository:
   
@@ -50,14 +48,24 @@
   
   Get the public SSH key using fluxctl:
     
-    fluxctl identity --k8s-fwd-ns nodejsdeploy
+    fluxctl identity --k8s-fwd-ns fluxcd
     
   In order to sync your cluster state with git you need to copy the public key and create a deploy key with write access on your GitHub repository.
   Open GitHub Repo --> settings --> Deploy Keys
   Add public key inside Deploy Keys
-  
-  ![image](https://user-images.githubusercontent.com/58024415/101140750-632f1d80-3639-11eb-81cb-62df35a35db0.png)
-
   Click on Allow write access check box and then click on Add Key
   
-  ![image](https://user-images.githubusercontent.com/58024415/101140439-fa47a580-3638-11eb-9905-797908298fc2.png)
+  ![image](https://user-images.githubusercontent.com/58024415/102525038-c1d7ab00-40bf-11eb-81ed-62ad06469429.png)
+
+# Install Helm Operator:
+  1. Clone helm operator code:
+    
+    git clone https://github.com/Naresh240/helm-operator-get-started.git
+    cd helm-operator-get-started
+  2. Install the HelmRelease Kubernetes custom resource definition:
+    
+    kubectl apply -f https://raw.githubusercontent.com/fluxcd/helm-operator/master/deploy/crds.yaml
+  3. Install Flux Helm Operator with Helm v3 support:
+  
+    helm upgrade -i helm-operator fluxcd/helm-operator --wait --namespace fluxcd --set git.ssh.secretName=flux-git-deploy --set helm.versions=v3
+  4. Keep Helm Release file inside our GitOps Repo and check whether deployment done or not
